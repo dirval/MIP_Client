@@ -1,1 +1,115 @@
 /* Empty. Add your own CSS if you like */
+#nav_menu{
+  width: 100%;
+  background-color: grey;
+  display: block;
+  box-sizing: border-box;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  background-color: #f8f8f8;
+}
+
+#menu{
+  height: 100%;
+  position: relative;
+}
+
+#takePhoto{
+  background-color: #f8f8f8;
+}
+
+.bar.bar-light{
+  background-color: #f8f8f8;
+  border-color: lightgrey;
+}
+
+#container{
+  display: block;
+  position: relative;
+  top: 45px;
+  margin: auto;
+  width: 100%;
+}
+
+.card, .list-inset{
+  margin: 0;
+}
+
+.item .comment{
+  white-space: normal;
+}
+
+.item h2{
+  font-weight: bold;
+}
+
+#container button{
+  background-color: white;
+}
+
+.icons_card{
+  border-bottom: 1px solid lightgrey;
+}
+
+#containerForm{
+  display: block;
+  position: relative;
+  top: 45px;
+  margin: auto;
+  width: 100%;
+  padding-top: 30%;
+}
+
+#containerProfile{
+  display: block;
+  position: relative;
+  top: 45px;
+  margin: auto;
+  width: 100%;
+}
+
+#containerSignup{
+  display: block;
+  position: relative;
+  top: 45px;
+  margin: auto;
+  width: 100%;
+}
+
+.col-33{
+  text-align: center;
+}
+
+#signup a{
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.formLogin{
+  width: 80%;
+  margin: auto;
+}
+
+.inputLogin{
+  border-radius: 6px;
+  background-color: #f8f8f8;
+  margin-bottom: 3%;
+}
+
+#loginButton{
+  width: 80%;
+  margin: auto;
+}
+
+#headLogin{
+  height: 20%;
+}
+
+#headLogin h1{
+  height: 100%;
+  font-size: 30px;
+  margin-top: 30%;
+  font-family: "Times New Roman", Times, serif;
+}

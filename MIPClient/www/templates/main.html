@@ -1,0 +1,73 @@
+<ion-view>
+  <!-- section for the menu  -->
+  <div class="tabs tabs-icon-only">
+    <a class="tab-item">
+      <i class="icon ion-ios-home"></i>
+    </a>
+
+    <a class="tab-item" ng-click="goToSearch()">
+      <i class="icon ion-ios-search"></i>
+    </a>
+
+    <a class="tab-item" ng-click="goToAdd()">
+      <i class="icon ion-ios-plus-outline"></i>
+    </a>
+
+    <a class="tab-item" ng-click="goToLike()">
+      <i class="icon ion-ios-heart-outline"></i>
+    </a>
+
+    <a class="tab-item" ng-click="goToProfile()">
+      <i class="icon ion-ios-person-outline"></i>
+    </a>
+  </div>
+  <ion-content>
+ <!-- header for the main page -->
+    <div class="bar bar-header bar-light">
+      <h1 class="title">Instagram</h1>
+    </div>
+<!-- container for maipage list -->
+    <div id="container">
+      <div class="list card">
+        <div class="item item-avatar item-icon-right">
+          <img src="img/marty.jpeg">
+          <h2>Marty McFly</h2>
+          <button class="button icon ion-more"></button>
+        </div>
+
+        <div class="item item-body">
+          <img class="full-image" src="img/back_the_future.jpeg">
+          <p class="icons_card">
+            <button class="button icon ion-ios-heart-outline" ng-click="addLike(1)"></button>
+            <button class="button icon ion-ios-chatbubble-outline" ng-click="goToComment(1)"></button>
+          </p>
+          <h3><i class="icon ion-ios-heart"></i> {{ nbLikes(1) }} likes</h3>
+          <p>View {{ nbcomment(1).length }} comments</p>
+          <p>14 hour ago!</p>
+
+        </div>
+      </div>
+
+      <div class="list card">
+        <div class="item item-avatar item-icon-right">
+          <img src="img/batman.jpeg">
+          <h2>Batman</h2>
+          <button class="button icon ion-more"></button>
+        </div>
+
+        <div class="item item-body">
+          <img class="full-image" src="img/bat_mobile.jpeg">
+          <p class="icons_card">
+            <button class="button icon ion-ios-heart-outline" ng-click="addLike(2)"></button>
+            <button class="button icon ion-ios-chatbubble-outline" ng-click="goToComment(2)"></button>
+          </p>
+          <h3><i class="icon ion-ios-heart"></i> {{ nbLikes(2) }} likes</h3>
+          <p>View {{ nbcomment(2).length }} comments</p>
+          <p>5 min ago!</p>
+
+        </div>
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>

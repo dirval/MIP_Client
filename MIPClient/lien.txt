@@ -1,0 +1,6 @@
+https://www.thepolyglotdeveloper.com/2014/09/use-android-ios-camera-ionic-framework/
+
+ADB
+
+https://devdactic.com/complete-image-guide-ionic/
+http://www.gajotres.net/accessing-image-galery-using-ionic-and-ngcordova/

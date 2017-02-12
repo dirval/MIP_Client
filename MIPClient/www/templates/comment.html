@@ -1,0 +1,23 @@
+<ion-view>
+  <ion-content>
+    <div class="bar bar-header bar-light">
+      <button class="button icon ion-chevron-left" ng-click='goToMain()'>Back</button>
+    </div>
+
+    <div id='container'>
+      <div class="list">
+        <div class="item item-avatar" ng-repeat="comment in comms">
+          <img src="img/rambo.jpeg">
+          <strong>Rambo</strong>
+          <p class="comment">{{comment.text}}</p>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+  <div class="bar bar-footer bar-stable">
+    <label class="item item-input">
+      <input type="text" placeholder="Comments" name="comment" ng-model="settings.comment" value="">
+    </label>
+    <button class="button icon ion-ios-paperplane-outline button-positive" ng-click="addComment(settings)">
+  </div>
+</ion-view>
