@@ -70,6 +70,40 @@
   width: 100%;
 }
 
+#containerLike{
+  display: block;
+  position: relative;
+  top: 45px;
+  margin: auto;
+  width: 100%;
+}
+
+#result{
+  font-weight: bold;
+  color: lightgreen;
+}
+
+#error{
+  font-weight: bold;
+  color: red;
+}
+
+#containerAdd{
+  display: block;
+  position: relative;
+  top: 45px;
+  margin: auto;
+  width: 100%;
+}
+
+#containerSearch{
+  display: block;
+  position: relative;
+  top: 45px;
+  margin: auto;
+  width: 100%;
+}
+
 #containerSignup{
   display: block;
   position: relative;
@@ -109,7 +143,7 @@
 
 #headLogin h1{
   height: 100%;
-  font-size: 30px;
-  margin-top: 30%;
+  font-size: 25px;
+  margin-top: 10%;
   font-family: "Times New Roman", Times, serif;
 }

@@ -26,10 +26,11 @@
       <button class="button icon ion-android-exit" ng-click="goToLogin()">Log Out</button>
     </div>
 
-    <div id="containerProfile">
+    <div id="containerProfile" data-ng-init="init()">
       <div class="list card">
         <div class="item item-avatar">
-          <img src="img/rambo.jpeg">
+          <img src="img/rambo.jpeg" ng-if="!imgProfile">
+          <img src="{{imgProfile}}" ng-if="imgProfile">
           <div class="row">
             <div class="col col-33">
               <h2>20</h2>
@@ -44,7 +45,30 @@
               <p>following</p>
             </div>
           </div>
-          <button class="button button-block button-small button-stable">Edit Profile</button>
+          <button class="button button-block button-small button-stable" ng-click="photoFromPhone()">Edit Profile</button>
+        </div>
+      </div>
+      <div class="item item-avatar">
+        <h1>My Post</h1>
+      </div>
+
+      <div class="list card" ng-repeat="post in myPosts" ng-if="post.name=='Rambo'">
+        <div class="item item-avatar item-icon-right">
+          <img src="{{post.imgProfile}}">
+          <h2>{{post.name}}</h2>
+        </div>
+
+        <div class="item item-body">
+          <img class="full-image" src="{{post.src}}">
+          <p>{{post.description}}</p>
+          <p class="icons_card">
+            <button class="button icon ion-ios-heart-outline" ng-click="addLike({{post.id}})" ng-if='!likes[post.id]'></button>
+            <button class="button icon ion-ios-heart" ng-click="addLike({{post.id}})" ng-if="likes[post.id]"></button>
+            <button class="button icon ion-ios-chatbubble-outline" ng-click="goToComment({{post.id}}, 'profile')"></button>
+          </p>
+          <h3><i class="icon ion-ios-heart"></i> {{ nbLikes(post.id) }} likes</h3>
+          <p>View {{ nbcomment(post.id).length }} comments</p>
+
         </div>
       </div>
     </div>

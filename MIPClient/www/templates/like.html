@@ -21,6 +21,31 @@
     </a>
   </div>
   <ion-content>
-    {{ name }}
+    <div class="bar bar-header bar-light">
+      <h1 class="title">Favorie</h1>
+    </div>
+    <div id="containerLike">
+      <div data-ng-init="init()">
+      <div class="list card" ng-repeat="post in myPosts" ng-if="likePhoto(post.id)">
+        <div class="item item-avatar item-icon-right">
+          <img src="{{post.imgProfile}}">
+          <h2>{{post.name}}</h2>
+        </div>
+
+        <div class="item item-body" >
+          <img class="full-image" src="{{post.src}}">
+          <p>{{post.description}}</p>
+          <p class="icons_card">
+            <button class="button icon ion-ios-heart-outline" ng-click="addLike({{post.id}})" ng-if='!likes[post.id]'></button>
+            <button class="button icon ion-ios-heart" ng-click="addLike({{post.id}})" ng-if="likes[post.id]"></button>
+            <button class="button icon ion-ios-chatbubble-outline" ng-click="goToComment({{post.id}}, 'like')"></button>
+          </p>
+          <h3><i class="icon ion-ios-heart"></i> {{ nbLikes(post.id) }} likes</h3>
+          <p>View {{ nbcomment(post.id).length }} comments</p>
+
+        </div>
+      </div>
+    </div>
+    </div>
   </ion-content>
 </ion-view>

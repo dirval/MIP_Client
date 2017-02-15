@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('starter', ['ionic', 'starter.controllers']);
+var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ion-gallery']);
 
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -35,6 +35,7 @@ app.config(function($stateProvider, $urlRouterProvider){
   .state('main', {
     url: '/main',
     templateUrl: 'templates/main.html',
+    cache: false,
     controller: 'mainCtrl'
   })
   .state('search', {
@@ -45,20 +46,23 @@ app.config(function($stateProvider, $urlRouterProvider){
   .state('add', {
     url: '/add',
     templateUrl: 'templates/add.html',
+    cache: false,
     controller: 'addCtrl'
   })
   .state('like',{
     url: '/like',
     templateUrl: 'templates/like.html',
+    cache: false,
     controller: 'likeCtrl'
   })
   .state('profile',{
     url: '/profile',
     templateUrl: 'templates/profile.html',
+    cache: false,
     controller: 'profileCtrl'
   })
   .state('comment',{
-    url: '/comment/:id',
+    url: '/comment/:page/:id',
     templateUrl: 'templates/comment.html',
     controller: 'commentCtrl'
   })
