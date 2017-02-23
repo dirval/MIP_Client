@@ -22,15 +22,14 @@
   </div>
   <ion-content>
     <div class="bar bar-header bar-light">
-      <h1 class="title">Rambo</h1>
+      <h1 class="title">{{userdata.username}}</h1>
       <button class="button icon ion-android-exit" ng-click="goToLogin()">Log Out</button>
     </div>
 
     <div id="containerProfile" data-ng-init="init()">
       <div class="list card">
         <div class="item item-avatar">
-          <img src="img/rambo.jpeg" ng-if="!imgProfile">
-          <img src="{{imgProfile}}" ng-if="imgProfile">
+          <img src="{{userdata.imageProfile}}">
           <div class="row">
             <div class="col col-33">
               <h2>20</h2>

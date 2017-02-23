@@ -1,27 +1,81 @@
 var app = angular.module('starter.controllers', []);
 
-app.controller('loginCtrl', function($scope, $state){
-  $scope.name = 'Login page';
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~ Login controller ~~~~~~~~~~~~~~~~~~~~~~~~~~
+app.controller('loginCtrl', function($scope, $state, User, $ionicPopup, $ionicHistory){
+
+  $scope.user = {
+    name: "",
+    password: ""
+  };
+
+  $scope.login = function(){
+    User.login($scope.user.name, $scope.user.password).then(function(response){
+      $ionicHistory.nextViewOptions({
+        disableBack: true
+      });
+      $state.go('main');
+    }).catch(function(){
+      var alertPopup = $ionicPopup.alert({
+        title: "login fail",
+        template: 'Incorrect username or password'
+      });
+    });
+  }
 
   $scope.goToMain = function(){
     $state.go('main');
   }
 });
 
+// ~~~~~~~~~~~~~~~~~~~~~~ signupCtrl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+app.controller('signupCtrl', function($scope, $state, User, $ionicPopup){
+  $scope.name="signup Page!"
+
+  $scope.user = {
+    username: "",
+    password: "",
+    email: ""
+  }
+
+  $scope.register = function(){
+    User.register($scope.user.username, $scope.user.password, $scope.user.email).then(function(){
+      console.log('a voir');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Register Success',
+        template: 'Your are now register, thank you :)'
+      })
+    }).catch(function(){
+      var alertPopup = $ionicPopup.alert({
+        title: "register fail",
+        template: 'there are a problem!'
+      });
+    });
+  }
+
+
+  $scope.goToLogin = function(){
+    $state.go('login');
+  }
+});
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ mainCtrl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-app.controller('mainCtrl', function($scope, $state, commentData, likeData, photoData){
+app.controller('mainCtrl', function($scope, $state, commentData, likeData, photoData, $http, User, API_ENDPOINT){
 
-  $scope.likes = [];
-  $scope.posts =  photoData.getPhoto();
+  photoData.getPost().then(function(postData){
+    var x = 0;
+    for (var i = 0; i < postData.length; i++) {
+      User.getUserPost(postData[i].id_user).then(function(userPost){
+        //console.log(userPost);
+        postData[x].user = userPost;
+        //console.log(postData[x]);
+        x ++;
+      });
 
-  $scope.init = function(){
-    for (var i = 0; i < $scope.posts.length; i++) {
-      $scope.likes[i] = likeData.getLike(i).havelike;
-      // console.log($scope.likePhoto);
-      // console.log($scope.likes[i]);
     }
-  }
+    $scope.postData = postData;
+  });
 
   $scope.addLike = function(id_photo){
     // console.log(likeData.getLikes(id_photo).like);
@@ -71,10 +125,52 @@ app.controller('mainCtrl', function($scope, $state, commentData, likeData, photo
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ searchCtrl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-app.controller('searchCtrl', function($scope, $state, $ionicPlatform, $cordovaCamera, photoData){
+app.controller('searchCtrl', function($scope, $state, $ionicPlatform, User, $cordovaCamera, photoData){
 
-  $scope.images = photoData.getPhoto();
-  console.log($scope.images);
+  $scope.tabs = {
+        people: true,
+        tags: false
+    };
+
+    $scope.input = {
+        searchText: ""
+    };
+
+    $scope.searchResults = {
+        people: [],
+        tags: []
+    };
+
+    $scope.emptySearch = function()
+    {
+        $scope.input.searchText = "";
+    };
+
+  $scope.tabActivate = function(tab)
+    {
+        for (var k in $scope.tabs) {
+            if ($scope.tabs.hasOwnProperty(k))
+            {
+                $scope.tabs[k] = false;
+            }
+        }
+        $scope.tabs[tab] = true;
+    };
+
+    $scope.updateSearch = function()
+    {
+        if($scope.tabs.people == true)
+        {
+            User.searchUser($scope.input.searchText).then(function(result) {
+                $scope.searchResults.people = result.data;
+                console.log(result.data);
+            });
+        }
+        else // search for posts with tags
+        {
+
+        }
+    };
 
   $scope.goToMain = function(){
     $state.go('main');
@@ -95,7 +191,7 @@ app.controller('searchCtrl', function($scope, $state, $ionicPlatform, $cordovaCa
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ addCtrl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-app.controller('addCtrl', function($scope, $state, $ionicPlatform, $cordovaCamera, photoData){
+app.controller('addCtrl', function($scope, $state, $ionicPlatform, $cordovaCamera, photoData, User, $cordovaFileTransfer){
   $scope.name='add Page!';
 
 
@@ -121,20 +217,22 @@ app.controller('addCtrl', function($scope, $state, $ionicPlatform, $cordovaCamer
       });
   }
 
-  $scope.saveImage = function(settings){
-    // console.log(settings.description);
-    var beforePush = photoData.getPhoto().length;
-    // console.log(beforePush);
-    photoData.addPhoto($scope.picture, settings.description);
-    if (photoData.getPhoto().length != beforePush) {
-      $scope.show = 'success';
-      $scope.result = 'Succes to upload photo!';
-      console.log($scope.result);
-    }
-    else {
-      $scope.show = 'error';
-      $scope.result = "Something Wrong!";
-    }
+  $scope.saveImage = function(){
+    var options = new FileUploadOptions();
+            options.fileKey = "image";
+
+            $cordovaFileTransfer.upload('https://afternoon-cliffs-12728.herokuapp.com/upload', $scope.picture, options).then(function(result) {
+                console.log("File upload complete");
+                console.log(result);
+                $scope.uploadResults = "Upload completed successfully"
+            }, function(err) {
+                console.log("File upload error");
+                console.log(err);
+                $scope.uploadResults = "Upload failed"
+            }, function (progress) {
+                // constant progress updates
+                console.log(progress);
+            });
   }
 
   $scope.photoFromPhone = function()
@@ -177,15 +275,7 @@ app.controller('addCtrl', function($scope, $state, $ionicPlatform, $cordovaCamer
 app.controller('likeCtrl', function($scope, $state, commentData, likeData, photoData){
 
   $scope.likes = [];
-  $scope.myPosts = photoData.getPhoto();
-
-  $scope.init = function(){
-    for (var i = 0; i < $scope.myPosts.length; i++) {
-      $scope.likes[i] = likeData.getLike(i).havelike;
-      // console.log($scope.likePhoto);
-      // console.log($scope.likes[i]);
-    }
-  }
+//  $scope.myPosts = photoData.getPhoto();
 
   $scope.addLike = function(id_photo){
     // console.log(likeData.getLikes(id_photo).like);
@@ -239,25 +329,13 @@ app.controller('likeCtrl', function($scope, $state, commentData, likeData, photo
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ profileCtrl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-app.controller('profileCtrl', function($scope, $state, $ionicPlatform, $cordovaCamera, photoData, likeData, commentData){
+app.controller('profileCtrl', function($scope, $state, $ionicPlatform, $cordovaCamera, photoData, likeData, commentData, User){
 
+  User.getMyInfo().then(function(userdata){
+    $scope.userdata = userdata;
+    //console.log($scope.userdata);
+  });
   $scope.likes = [];
-  $scope.myPosts = photoData.getPhoto();
-
-  $scope.init = function(){
-    for (var i = 0; i < $scope.myPosts.length; i++) {
-      $scope.likes[i] = likeData.getLike(i).havelike;
-      // console.log(photoData.getPhoto()[i].name);
-      if (photoData.getPhoto()[i].name == 'Rambo') {
-        $scope.imgProfile = photoData.getPhoto()[i].imgProfile;
-      }
-      else {
-        console.log('doesn t work!');
-      }
-      // console.log($scope.likePhoto);
-      // console.log($scope.likes[i]);
-    }
-  }
 
   $scope.photoFromPhone = function()
   {
@@ -351,95 +429,5 @@ app.controller('commentCtrl', function($scope,$state, $stateParams, commentData)
   $scope.goToPreviousPage = function(){
     console.log($scope.page);
     $state.go($scope.page);
-  }
-});
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~ factory commentData ~~~~~~~~~~~~~~~~~~~~~~~
-
-app.factory('commentData', [function(){
-  var commentStorage = [];
-
-  return{
-    addComment: function(id_post,text_com){
-      // console.log("add comment");
-      commentStorage[id_post].push({
-        text:text_com
-      });
-    },
-    getComments: function(id_post){
-      // console.log("get comment");
-      if (commentStorage[id_post] == undefined) {
-        commentStorage[id_post] = [];
-      }
-      return commentStorage[id_post];
-    }
-  };
-}]);
-
-// ~~~~~~~~~~~~~~~~~~~~~~ factory likeData ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-app.factory('likeData', [function(){
-  var likeStorage = [];
-
-  return{
-    addLike: function(id_post){
-      // console.log("add like");
-      likeStorage[id_post].like++;
-      likeStorage[id_post].havelike = true;
-      // console.log(likeStorage[id_post]);
-    },
-    removeLike: function(id_post){
-      // console.log("remove like");
-      likeStorage[id_post].like--;
-      likeStorage[id_post].havelike = false;
-      // console.log(likeStorage[id_post]);
-    },
-    getLike: function(id_post){
-      if (likeStorage[id_post] == undefined) {
-        likeStorage[id_post] = {like: 0, havelike: false};
-      }
-      return likeStorage[id_post];
-    }
-  };
-}]);
-
-// ~~~~~~~~~~~~~~~~~~~~~~~ factory photoData ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-app.factory('photoData', [function(){
-  var photoStorage = [
-    {id: 0, src: "img/back_the_future.jpeg", description: "Is it a our new poster!", imgProfile: "img/marty.jpeg", name:"Marty McFly"},
-    {id: 1, src:'img/bat_mobile.jpeg', description: "I buy a new car!",imgProfile: "img/batman.jpeg", name: "Batman" }
-  ];
-
-  return{
-    addPhoto: function(uri, descri){
-      photoStorage.push({
-        id: photoStorage.length , src: uri, description: descri, imgProfile: "img/rambo.jpeg", name: "Rambo"
-      });
-      console.log(uri);
-      console.log(photoStorage);
-    },
-    getPhoto: function(){
-      console.log(photoStorage.length);
-      return photoStorage;
-    },
-    updateProfile: function(uri){
-      for (var i = 0; i < photoStorage.length; i++) {
-        if (photoStorage[i].name == 'Rambo') {
-          photoStorage[i].imgProfile = uri;
-        }
-      }
-      console.log(uri);
-    }
-  };
-}]);
-
-// ~~~~~~~~~~~~~~~~~~~~~~ signupCtrl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-app.controller('signupCtrl', function($scope, $state){
-  $scope.name="signup Page!"
-
-  $scope.goToLogin = function(){
-    $state.go('login');
   }
 });

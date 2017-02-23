@@ -28,15 +28,15 @@
     </div>
 <!-- container for maipage list -->
     <div id="container" data-ng-init="init()">
-      <div class="list card" ng-repeat="post in posts">
+      <div class="list card" ng-repeat="post in postData">
         <div class="item item-avatar item-icon-right">
-          <img src="{{post.imgProfile}}">
-          <h2>{{post.name}}</h2>
+          <img src="{{post.user.imgProfile}}">
+          <h2>{{post.user.username}}</h2>
           <button class="button icon ion-more"></button>
         </div>
 
         <div class="item item-body">
-          <img class="full-image" src="{{post.src}}">
+          <img class="full-image" src="{{post.picture}}">
           <p>{{post.description}}</p>
           <p class="icons_card">
             <button class="button icon ion-ios-heart-outline" ng-click="addLike({{post.id}})" ng-if="!likes[post.id]"></button>
