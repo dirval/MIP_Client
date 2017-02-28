@@ -41,9 +41,9 @@
         <div class="item item-body">
           <img class="full-image" ng-src="{{picture}}" ng-if="picture">
           <img class="full-image" src="img/default.jpeg" ng-if="!picture">
-          <input type="text" value="" placeholder="Put a description" name="description" ng-model="settings.description">
+          <input type="text" value="" placeholder="Put a description" ng-model="post.comment">
           <p id="result">{{uploadResults}}</p>
-          <p><button class="button button-positive button-block" ng-click="saveImage(settings)" ng-if="picture">Save</button></p>
+          <p><button class="button button-positive button-block" ng-click="saveImage()" >Save</button></p>
 
         </div>
 

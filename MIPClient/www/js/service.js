@@ -67,7 +67,6 @@ app.factory('User', function($q, $http, API_ENDPOINT){
     getUserPost: function(id_user){
       return $q(function(resolve, reject){
         $http.get(API_ENDPOINT.url + 'postUser/' + id_user).then(function(result){
-          console.log(result.data);
           resolve(result.data);
         });
       });
@@ -129,13 +128,28 @@ app.factory('likeData', [function(){
 app.factory('photoData',function($q, $http, API_ENDPOINT){
 
   return{
-    addPost: function(uri, descri){
-
+    addPost: function(descri, user_id){
+      return $q(function(resolve, reject){
+        console.log(user_id);
+        console.log(descri);
+        $http.post(API_ENDPOINT.url + 'upload', {id_user: user_id, description: descri}).then(function(result){
+          console.log(result.data);
+          resolve();
+        });
+      });
     },
     getPost: function(){
       return $q(function(resolve, reject){
         $http.get(API_ENDPOINT.url + 'posts').then(function(postdata){
           console.log(postdata.data);
+          resolve(postdata.data);
+        });
+      });
+    },
+    getMypost: function(id_user){
+      return $q(function(resolve, reject){
+        $http.post(API_ENDPOINT.url + 'myPost/' + id_user).then(function(postdata){
+          console.log(postdata);
           resolve(postdata.data);
         });
       });

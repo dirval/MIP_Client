@@ -192,8 +192,11 @@ app.controller('searchCtrl', function($scope, $state, $ionicPlatform, User, $cor
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ addCtrl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 app.controller('addCtrl', function($scope, $state, $ionicPlatform, $cordovaCamera, photoData, User, $cordovaFileTransfer){
-  $scope.name='add Page!';
 
+  User.getMyInfo().then(function(userdata){
+    $scope.userdata = userdata;
+    //console.log($scope.userdata);
+  });
 
   $scope.takePhoto = function()
   {
@@ -217,9 +220,20 @@ app.controller('addCtrl', function($scope, $state, $ionicPlatform, $cordovaCamer
       });
   }
 
+  $scope.post = {
+    comment: ""
+  };
+
   $scope.saveImage = function(){
+
+
     var options = new FileUploadOptions();
             options.fileKey = "image";
+            var params = {};
+            params.description = $scope.post.comment;
+            params.id_user = $scope.userdata.id;
+            options.params = params;
+
 
             $cordovaFileTransfer.upload('https://afternoon-cliffs-12728.herokuapp.com/upload', $scope.picture, options).then(function(result) {
                 console.log("File upload complete");
@@ -329,67 +343,23 @@ app.controller('likeCtrl', function($scope, $state, commentData, likeData, photo
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ profileCtrl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-app.controller('profileCtrl', function($scope, $state, $ionicPlatform, $cordovaCamera, photoData, likeData, commentData, User){
+app.controller('profileCtrl', function($scope, $state, $ionicPlatform, $cordovaCamera, photoData, User){
 
   User.getMyInfo().then(function(userdata){
     $scope.userdata = userdata;
-    //console.log($scope.userdata);
+    images = [];
+    photoData.getMypost($scope.userdata.id).then(function(myPost){
+      for (var i = 0; i < myPost.length; i++) {
+        images.push({
+          src: myPost[i]
+        });
+      }
+      console.log(images);
+      $scope.images = images;
+
+    });
   });
-  $scope.likes = [];
 
-  $scope.photoFromPhone = function()
-  {
-      var options =  {
-          quality: 80,
-          destinationType: Camera.DestinationType.FILE_URI,
-          sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-          mediaType: Camera.MediaType.PICTURE
-      };
-
-      $ionicPlatform.ready(function() {
-          $cordovaCamera.getPicture(options).then(function(imageData) {
-              $scope.picture = imageData;
-              $scope.update();
-          }, function(err) {
-                console.log("ERROR! Don't get photo from phone");
-          });
-      });
-
-
-  }
-
-  $scope.update = function(){
-    photoData.updateProfile($scope.picture);
-  }
-
-  $scope.addLike = function(id_photo){
-    // console.log(likeData.getLikes(id_photo).like);
-    if (likeData.getLike(id_photo).havelike == true) {
-      likeData.removeLike(id_photo);
-      $scope.likes[id_photo] = likeData.getLike(id_photo).havelike;
-      console.log(id_photo);
-      console.log($scope.likes[id_photo]);
-    }
-    else {
-      likeData.addLike(id_photo);
-      $scope.likes[id_photo] = likeData.getLike(id_photo).havelike;
-      console.log(id_photo);
-      console.log($scope.likes[id_photo]);
-    }
-  }
-
-
-  $scope.goToComment = function(id, page){
-    $state.go('comment', {id: id, page: page});
-  }
-
-  $scope.nbLikes = function(id_photo){
-    return likeData.getLike(id_photo).like;
-  }
-
-  $scope.nbcomment = function(id_photo){
-    return commentData.getComments(id_photo);
-  }
 
   $scope.goToSearch = function(){
     $state.go('search');

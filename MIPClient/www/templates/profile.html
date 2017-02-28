@@ -50,26 +50,7 @@
       <div class="item item-avatar">
         <h1>My Post</h1>
       </div>
-
-      <div class="list card" ng-repeat="post in myPosts" ng-if="post.name=='Rambo'">
-        <div class="item item-avatar item-icon-right">
-          <img src="{{post.imgProfile}}">
-          <h2>{{post.name}}</h2>
-        </div>
-
-        <div class="item item-body">
-          <img class="full-image" src="{{post.src}}">
-          <p>{{post.description}}</p>
-          <p class="icons_card">
-            <button class="button icon ion-ios-heart-outline" ng-click="addLike({{post.id}})" ng-if='!likes[post.id]'></button>
-            <button class="button icon ion-ios-heart" ng-click="addLike({{post.id}})" ng-if="likes[post.id]"></button>
-            <button class="button icon ion-ios-chatbubble-outline" ng-click="goToComment({{post.id}}, 'profile')"></button>
-          </p>
-          <h3><i class="icon ion-ios-heart"></i> {{ nbLikes(post.id) }} likes</h3>
-          <p>View {{ nbcomment(post.id).length }} comments</p>
-
-        </div>
-      </div>
+      <ion-gallery ion-gallery-items="images" ion-gallery-row="4" ng-if='images'></ion-gallery>
     </div>
   </ion-content>
 </ion-view>
