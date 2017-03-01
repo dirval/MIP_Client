@@ -148,7 +148,7 @@ app.factory('photoData',function($q, $http, API_ENDPOINT){
     },
     getMypost: function(id_user){
       return $q(function(resolve, reject){
-        $http.post(API_ENDPOINT.url + 'myPost/' + id_user).then(function(postdata){
+        $http.post(API_ENDPOINT.url + 'mypost/' + id_user).then(function(postdata){
           console.log(postdata);
           resolve(postdata.data);
         });

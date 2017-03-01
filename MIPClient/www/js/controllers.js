@@ -356,7 +356,6 @@ app.controller('profileCtrl', function($scope, $state, $ionicPlatform, $cordovaC
       }
       console.log(images);
       $scope.images = images;
-
     });
   });
 
